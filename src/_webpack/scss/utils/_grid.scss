@@ -1,0 +1,25 @@
+// Grid
+
+// How to use:
+// For width values always use the mixin grid() on desktop
+// If your element is nested, do grid({nb-cols}, {parent-nb-cols})
+
+@function grid($cols, $parent-cols: $total-cols) {
+  @return ($cols / $parent-cols) * 100%;
+}
+
+/*
+* Avoid using this whenever possible!
+*/
+@function grid-vw($cols, $breakpoint: null) {
+  $result: 0;
+  @if $breakpoint == above-container {
+    $result: ($cols / $total-cols) * #{$container}px;
+  } @else {
+    $result: ($cols / $total-cols) * 100vw;
+  }
+  @return $result;
+}
+
+// grid-mobile (In coming)
+//

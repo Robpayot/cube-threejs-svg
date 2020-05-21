@@ -1,0 +1,12 @@
+---
+layout: default
+---
+<!-- set global assets path -->
+{% assign assetsPath = site.url | append: "/assets/" %}
+
+<main class="page">
+  {% for section in page.sections %}
+    {% include _sections/{{section.section}}/index.html %}
+  {% endfor %}
+</main>
+

@@ -1,0 +1,22 @@
+html {
+  box-sizing: border-box;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  background-color: $color-off-white;
+  color: $color-ls-black;
+  overflow-x: hidden; // important for shapes going outside the body
+  width: 100%;
+}
+
+a {
+  color: inherit;
+}

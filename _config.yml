@@ -1,0 +1,27 @@
+title: LightStep
+description: >-
+  LightStep website
+baseurl: ""
+url: ""
+
+include: ["_pages"] # if we don't include pages, livereload is broken
+exclude: ["_webpack"]
+
+source: src
+destination: dist
+
+collections:
+  pages:
+    output: true
+    permalink: /:name/
+    sort_by: order
+
+# set up default layouts so we don't have to add them on each pages
+defaults:
+  -
+    scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "page"
+

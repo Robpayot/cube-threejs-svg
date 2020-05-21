@@ -1,0 +1,15 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+      "file_exclude_patterns": [
+        "*.js.map"
+      ],
+      "folder_exclude_patterns": ["node_modules", "dist"]
+		}
+	],
+  "syntax_override": {
+    "\\.html$": ["Jinja2", "Syntaxes", "HTML (Jinja2)"]
+  }
+}
