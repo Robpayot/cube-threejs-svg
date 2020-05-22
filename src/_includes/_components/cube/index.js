@@ -295,6 +295,8 @@ class Cube {
     object.position.copy(pos)
     object.rotation.copy(rot)
 
+    object.position.x -= 70 // offset to put the text a little bit in front of the cube's face
+
     // use this object as a pivot point
     const plane = new THREE.Object3D()
     plane.add(object)
@@ -303,7 +305,6 @@ class Cube {
 
     this.graphs.push(plane)
 
-    this.graphOriginPosition = plane.position.clone()
     this.graphOriginRotation = plane.rotation.clone()
   }
 
