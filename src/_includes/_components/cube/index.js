@@ -7,7 +7,6 @@ import getNow from '_js/utils/time'
 
 import RAFManager from '_js/managers/RAFManager'
 import MouseManager from '_js/managers/MouseManager'
-import ObserverManager from '_js/managers/ObserverManager'
 
 import shape1 from '_assets/cube/01_start.obj'
 import shape2 from '_assets/cube/02b_face.obj'
@@ -126,10 +125,10 @@ class Cube {
 
   events(enable) {
     if (enable) {
-      this.elem.addEventListener('click', this.toggleStyle)
+      // this.elem.addEventListener('click', this.toggleStyle)
       window.addEventListener('resize', this.handleResize)
     } else {
-      this.elem.removeEventListener('click', this.toggleStyle)
+      // this.elem.removeEventListener('click', this.toggleStyle)
       window.removeEventListener('resize', this.handleResize)
     }
   }
@@ -246,7 +245,7 @@ class Cube {
 
     const lineMaterial = new THREE.LineBasicMaterial({
       color: COLORS.black,
-      linewidth: size / 70,
+      linewidth: size / 50,
     })
 
     const geometry = this.shapes[this.phase].children[0].geometry.clone() // clone() is very important here
