@@ -312,12 +312,12 @@ class Cube {
   }
 
   initCircle() {
-    const geometry = new THREE.CircleBufferGeometry(17, 32)
+    const size = 22
+    const geometry = new THREE.BoxBufferGeometry(size, size, size)
     const color = new THREE.Color(...this.circleColor)
     this.circleMaterial = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0 })
     this.circle = new THREE.Mesh(geometry, this.circleMaterial)
-    this.circle.lookAt(this.camera.position)
-    this.scene.add(this.circle)
+    this.cube.add(this.circle)
   }
 
   startTransition(axis) {
