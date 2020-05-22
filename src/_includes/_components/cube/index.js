@@ -28,8 +28,8 @@ class Cube {
     this.longDuration = 4000
     this.durationRotate = 3000
     this.durationMorph = 3000
-    this.durationCircleAppear = 500
-    this.durationCircleScale = 1000
+    this.durationInsideCubeAppear = 500
+    this.durationInsideCubeScale = 1000
     this.mouse = {
       x: 0,
       y: 0,
@@ -50,11 +50,11 @@ class Cube {
     this.transitionStarted = false
     this.phase = 0
     this.offsetCubeRotY = THREE.Math.degToRad(90)
-    this.circleScale = 0.01
+    this.insideCubeScale = 0.01
 
     this.shapes = [null, null, null]
-    this.circleColors = [COLORS.green, COLORS.yellow, COLORS.blue]
-    this.circleColor = [...COLORS.green] // need to be a different reference than COLORS.green
+    this.insideCubeColors = [COLORS.green, COLORS.yellow, COLORS.blue]
+    this.insideCubeColor = [...COLORS.green] // need to be a different reference than COLORS.green
     this.targetColor = [0, 0, 0]
     this.OBJLoader = new OBJLoader()
     this.cubeParent = new THREE.Object3D()
@@ -110,11 +110,11 @@ class Cube {
     this.buildCamera()
 
     this.initCube()
-    this.initCircle()
+    this.initInsideCube()
     this.elem.classList.add('transi-in')
 
     this.mainEvents(true)
-    this.introCircle()
+    this.introInsideCube()
 
     this.started = true
     this.events(true)
@@ -146,14 +146,14 @@ class Cube {
     }
   }
 
-  introCircle() {
-    this.showCircleStarted = true
-    this.startAnimationCircle = getNow()
-    this.circleOpacity = 0
-    this.circleOpacityTarget = 1
+  introInsideCube() {
+    this.showInsideCubeStarted = true
+    this.startAnimationInsideCube = getNow()
+    this.insideCubeOpacity = 0
+    this.insideCubeOpacityTarget = 1
     this.elem.classList.add('show-dot')
-    this.circleScale = 0.01
-    this.circleScaleTarget = 1
+    this.insideCubeScale = 0.01
+    this.insideCubeScaleTarget = 1
     this.showDot = true
   }
 
@@ -166,7 +166,7 @@ class Cube {
     const loop = () => {
       const nextIndex = index + 1 > 2 ? 0 : index + 1
       this.phase = nextIndex
-      this.targetColor = this.circleColors[nextIndex]
+      this.targetColor = this.insideCubeColors[nextIndex]
       let delayPhase = 0
 
       switch (index) {
@@ -311,13 +311,13 @@ class Cube {
     this.graphOriginRotation = plane.rotation.clone()
   }
 
-  initCircle() {
+  initInsideCube() {
     const size = 22
     const geometry = new THREE.BoxBufferGeometry(size, size, size)
-    const color = new THREE.Color(...this.circleColor)
-    this.circleMaterial = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0 })
-    this.circle = new THREE.Mesh(geometry, this.circleMaterial)
-    this.cube.add(this.circle)
+    const color = new THREE.Color(...this.insideCubeColor)
+    this.insideCubeMaterial = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0 })
+    this.insideCube = new THREE.Mesh(geometry, this.insideCubeMaterial)
+    this.cube.add(this.insideCube)
   }
 
   startTransition(axis) {
@@ -359,22 +359,22 @@ class Cube {
   }
 
   toggleStyle = () => {
-    // this.showCircleStarted = true
-    // this.startAnimationCircle = getNow()
+    // this.showInsideCubeStarted = true
+    // this.startAnimationInsideCube = getNow()
 
     // if (this.showDot === true) {
     //   this.elem.classList.remove('show-dot')
     //   this.showDot = false
-    //   this.circleOpacity = 1
-    //   this.circleOpacityTarget = 0
-    //   this.circleScale = 1
-    //   this.circleScaleTarget = 0.01 // not 0 to avoid three js scale issues
+    //   this.insideCubeOpacity = 1
+    //   this.insideCubeOpacityTarget = 0
+    //   this.insideCubeScale = 1
+    //   this.insideCubeScaleTarget = 0.01 // not 0 to avoid three js scale issues
     // } else {
-    //   this.circleOpacity = 0
-    //   this.circleOpacityTarget = 1
+    //   this.insideCubeOpacity = 0
+    //   this.insideCubeOpacityTarget = 1
     //   this.elem.classList.add('show-dot')
-    //   this.circleScale = 0.01
-    //   this.circleScaleTarget = 1
+    //   this.insideCubeScale = 0.01
+    //   this.insideCubeScaleTarget = 1
     //   this.showDot = true
     // }
   }
@@ -399,49 +399,49 @@ class Cube {
       this.rendererCSS.render(this.sceneCSS, this.camera)
 
       if (this.transitionStarted) {
-        this.changeCircleColor(now)
+        this.changeInsideCubeColor(now)
         this.rotateOnOneSide(now)
         this.morph(now)
       }
 
-      if (this.showCircleStarted) {
-        this.animateCircle(now)
+      if (this.showInsideCubeStarted) {
+        this.animateInsideCube(now)
       }
 
       this.mouseRotation()
     }
   }
 
-  animateCircle(now) {
+  animateInsideCube(now) {
     // opacity
-    const percent = (now - this.startAnimationCircle) / this.durationCircleAppear
-    const opacity = this.circleOpacity + (this.circleOpacityTarget - this.circleOpacity) * outExpo(percent)
+    const percent = (now - this.startAnimationInsideCube) / this.durationInsideCubeAppear
+    const opacity = this.insideCubeOpacity + (this.insideCubeOpacityTarget - this.insideCubeOpacity) * outExpo(percent)
     if (percent < 1) {
-      this.circleMaterial.opacity = opacity
-      // this.circleMaterial.needsUpdate = true
+      this.insideCubeMaterial.opacity = opacity
+      // this.insideCubeMaterial.needsUpdate = true
     }
 
     // scale
-    const percentScale = (now - this.startAnimationCircle) / this.durationCircleScale
-    const scale = this.circleScale + (this.circleScaleTarget - this.circleScale) * outExpo(percentScale)
+    const percentScale = (now - this.startAnimationInsideCube) / this.durationInsideCubeScale
+    const scale = this.insideCubeScale + (this.insideCubeScaleTarget - this.insideCubeScale) * outExpo(percentScale)
     // const roundValue = 1000
     // scale = Math.round(scale * roundValue) / roundValue
 
     if (percentScale < 1) {
-      this.circle.scale.set(scale, scale, scale)
+      this.insideCube.scale.set(scale, scale, scale)
     } else {
-      this.showCircleStarted = false
+      this.showInsideCubeStarted = false
     }
   }
 
-  changeCircleColor(now) {
+  changeInsideCubeColor(now) {
     const percent = (now - this.startAnimation) / this.durationRotate
 
-    this.circleColor[0] += (this.targetColor[0] - this.circleColor[0]) * outExpo(percent)
-    this.circleColor[1] += (this.targetColor[1] - this.circleColor[1]) * outExpo(percent)
-    this.circleColor[2] += (this.targetColor[2] - this.circleColor[2]) * outExpo(percent)
+    this.insideCubeColor[0] += (this.targetColor[0] - this.insideCubeColor[0]) * outExpo(percent)
+    this.insideCubeColor[1] += (this.targetColor[1] - this.insideCubeColor[1]) * outExpo(percent)
+    this.insideCubeColor[2] += (this.targetColor[2] - this.insideCubeColor[2]) * outExpo(percent)
 
-    this.circleMaterial.color.setRGB(this.circleColor[0], this.circleColor[1], this.circleColor[2])
+    this.insideCubeMaterial.color.setRGB(this.insideCubeColor[0], this.insideCubeColor[1], this.insideCubeColor[2])
   }
 
   rotateOnOneSide(now) {
