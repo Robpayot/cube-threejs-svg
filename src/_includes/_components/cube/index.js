@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import lottie from 'lottie-web'
 import { SVGRenderer } from 'three/examples/jsm/renderers/SVGRenderer'
 import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRenderer'
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
@@ -13,9 +12,6 @@ import ObserverManager from '_js/managers/ObserverManager'
 import shape1 from '_assets/cube/01_start.obj'
 import shape2 from '_assets/cube/02b_face.obj'
 import shape3 from '_assets/cube/03_face.obj'
-import lottie1 from '_assets/cube/lotties/histogram.json'
-import lottie2 from '_assets/cube/lotties/operations.json'
-import lottie3 from '_assets/cube/lotties/traces.json'
 
 const COLORS = {
   black: 0x000000,
@@ -43,7 +39,7 @@ class Cube {
     this.mouseMaxAngle = 10
     this.mouseDelay = 0.1
     this.extendCoef = 1.3
-    this.lotties = [{ file: lottie1 }, { file: lottie2 }, { file: lottie3 }]
+    this.htmlDivs = [{ text: 'THREE.JS' }, { text: 'SVG' }, { text: 'MORPHING' }]
     this.graphs = []
     this.targetCubeRotateY = 0
     this.targetCubeRotateZ = 0
@@ -57,11 +53,7 @@ class Cube {
     this.circleScale = 0.01
 
     this.shapes = [null, null, null]
-    this.circleColors = [
-      COLORS.green,
-      COLORS.yellow,
-      COLORS.blue,
-    ]
+    this.circleColors = [COLORS.green, COLORS.yellow, COLORS.blue]
     this.circleColor = [...COLORS.green] // need to be a different reference than COLORS.green
     this.targetColor = [0, 0, 0]
     this.OBJLoader = new OBJLoader()
@@ -164,58 +156,51 @@ class Cube {
 
   loopPhases() {
     this.phase = 0
-    this.lotties[0].animation.goToAndPlay(0)
-    this.lotties[0].animation.wrapper.classList.add('is-playing')
-    const videoIsEnding = [true, true, true]
-    const offsetTime = 10 // time to start the transition before the video end
-    let delayLottie = 400
 
-    this.lotties.forEach((item, index) => {
-      const nextIndex = index + 1 > this.lotties.length - 1 ? 0 : index + 1
+    let index = 0
+    const mainDelay = 3400
 
-      item.animation.addEventListener('enterFrame', e => {
-        if (e.currentTime > e.totalTime - offsetTime && videoIsEnding[index]) {
-          this.phase = nextIndex
-          this.targetColor = this.circleColors[nextIndex]
+    const loop = () => {
+      const nextIndex = index + 1 > 2 ? 0 : index + 1
+      this.phase = nextIndex
+      this.targetColor = this.circleColors[nextIndex]
+      let delayPhase = 0
 
-          switch (index) {
-            case 0:
-              this.durationRotate = this.normalDuration
-              this.durationMorph = this.normalDuration
-              delayLottie = 400
-              this.startTransition('y')
-              break
-            case 1:
-              this.durationRotate = this.normalDuration
-              this.durationMorph = this.normalDuration
-              delayLottie = 400
-              this.startTransition('z')
-              break
-            case 2:
-              this.durationRotate = this.longDuration
-              this.durationMorph = this.longDuration
-              delayLottie = 1200
-              this.startTransition('init-state')
-              break
-            default:
-          }
+      switch (index) {
+        case 0:
+          this.durationRotate = this.normalDuration
+          this.durationMorph = this.normalDuration
+          this.startTransition('y')
+          break
+        case 1:
+          this.durationRotate = this.normalDuration
+          this.durationMorph = this.normalDuration
+          this.startTransition('z')
+          break
+        case 2:
+          this.durationRotate = this.longDuration
+          this.durationMorph = this.longDuration
+          delayPhase = 800
+          this.startTransition('init-state')
+          break
+        default:
+      }
 
-          item.animation.wrapper.classList.remove('is-playing')
+      this.htmlDivs[index].wrapper.classList.remove('is-playing')
+      this.htmlDivs[nextIndex].wrapper.classList.add('is-playing')
 
-          clearTimeout(this.startLottieTimeout)
+      setTimeout(() => {
+        loop()
+      }, mainDelay + delayPhase)
 
-          this.startLottieTimeout = setTimeout(() => {
-            this.lotties[nextIndex].animation.goToAndPlay(0)
-            this.lotties[nextIndex].animation.wrapper.classList.add('is-playing')
-          }, delayLottie)
-          // reset videoIsEnding bool
-          videoIsEnding[0] = true
-          videoIsEnding[1] = true
-          videoIsEnding[2] = true
-          videoIsEnding[index] = false
-        }
-      })
-    })
+      if (index === 2) {
+        index = 0
+      } else {
+        index += 1
+      }
+    }
+
+    loop()
   }
 
   buildScene() {
@@ -254,7 +239,7 @@ class Cube {
 
   initCube() {
     // edges
-    const size = 140
+    const size = 100
 
     const lineMaterial = new THREE.LineBasicMaterial({
       color: COLORS.black,
@@ -268,8 +253,8 @@ class Cube {
 
     const offset = size / 7
 
-    // create graphs
-    for (let i = 0; i < this.lotties.length; i++) {
+    // create texts
+    for (let i = 0; i < this.htmlDivs.length; i++) {
       let pos = new THREE.Vector3((-(size / 2 + offset) * 1) / this.sceneCSSScale, 0, 0)
 
       if (i === 1) {
@@ -277,13 +262,11 @@ class Cube {
       }
 
       this.createPlane(
-        size + 40,
-        size + 40,
+        size,
         '#00ff00',
         pos,
         new THREE.Euler(0, THREE.Math.degToRad(-90), 0),
-        this.lotties[i].file,
-        i,
+        this.htmlDivs[i],
       )
     }
 
@@ -297,13 +280,16 @@ class Cube {
     this.scene.add(this.cubeParent)
   }
 
-  createPlane(width, height, cssColor, pos, rot, lottieFile, index) {
+  createPlane(size, cssColor, pos, rot, htmlDiv) {
     // check how to fix bug on chrome
     const div = document.createElement('div')
-    div.style.width = `${(width * 1) / this.sceneCSSScale}px`
-    div.style.height = `${(height * 1) / this.sceneCSSScale}px`
+    div.style.width = `${(size + 600) / this.sceneCSSScale}px`
+    div.style.height = `${(size + 40) / this.sceneCSSScale}px`
+    div.style.fontSize = `${(size / 2) / this.sceneCSSScale}px`
 
-    div.classList.add('cube__svg')
+    div.classList.add('cube__text')
+    div.innerHTML = htmlDiv.text
+    htmlDiv.wrapper = div
 
     const object = new CSS3DObject(div)
     object.position.copy(pos)
@@ -315,15 +301,6 @@ class Cube {
 
     this.graphParent.add(plane)
 
-    const lottieAnimation = lottie.loadAnimation({
-      container: div,
-      renderer: 'svg',
-      loop: false,
-      autoplay: false,
-      animationData: lottieFile,
-    })
-
-    this.lotties[index].animation = lottieAnimation
     this.graphs.push(plane)
 
     this.graphOriginPosition = plane.position.clone()
@@ -495,7 +472,6 @@ class Cube {
     this.graphs[this.phase].rotation.z = nextGraphProgressZ
 
     if (percent > 1) {
-      // this.angleY = this.targetCubeRotateY
       // end of animation
       this.transitionStarted = false
       // reset graph rotation
