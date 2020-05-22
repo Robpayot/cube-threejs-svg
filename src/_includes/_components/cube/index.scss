@@ -4,13 +4,13 @@
   position: relative;
   transform: scale(.8);
 
-  &.show-dot {
-    .cube__svg.is-playing {
-      // display: none;
-      opacity: 0;
-      transition: opacity .5s $easeout-expo;
-    }
-  }
+  // &.show-dot {
+  //   .cube__svg.is-playing {
+  //     // display: none;
+  //     opacity: 0;
+  //     transition: opacity .5s $easeout-expo;
+  //   }
+  // }
 
   &.transi-in {
     opacity: 1;

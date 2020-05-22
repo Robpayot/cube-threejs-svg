@@ -113,7 +113,8 @@ class Cube {
     this.initCircle()
     this.elem.classList.add('transi-in')
 
-    ObserverManager.addItem(this.elem, this.observerCallback)
+    this.mainEvents(true)
+    this.introCircle()
 
     this.started = true
     this.events(true)
@@ -145,13 +146,15 @@ class Cube {
     }
   }
 
-  observerCallback = intersect => {
-    if (intersect) {
-      this.mainEvents(true)
-    } else if (this.mainEventsActive === true) {
-      // stop the scene if the cube is outside of the viewport
-      this.mainEvents(false)
-    }
+  introCircle() {
+    this.showCircleStarted = true
+    this.startAnimationCircle = getNow()
+    this.circleOpacity = 0
+    this.circleOpacityTarget = 1
+    this.elem.classList.add('show-dot')
+    this.circleScale = 0.01
+    this.circleScaleTarget = 1
+    this.showDot = true
   }
 
   loopPhases() {
@@ -356,24 +359,24 @@ class Cube {
   }
 
   toggleStyle = () => {
-    this.showCircleStarted = true
-    this.startAnimationCircle = getNow()
+    // this.showCircleStarted = true
+    // this.startAnimationCircle = getNow()
 
-    if (this.showDot === true) {
-      this.elem.classList.remove('show-dot')
-      this.showDot = false
-      this.circleOpacity = 1
-      this.circleOpacityTarget = 0
-      this.circleScale = 1
-      this.circleScaleTarget = 0.01 // not 0 to avoid three js scale issues
-    } else {
-      this.circleOpacity = 0
-      this.circleOpacityTarget = 1
-      this.elem.classList.add('show-dot')
-      this.circleScale = 0.01
-      this.circleScaleTarget = 1
-      this.showDot = true
-    }
+    // if (this.showDot === true) {
+    //   this.elem.classList.remove('show-dot')
+    //   this.showDot = false
+    //   this.circleOpacity = 1
+    //   this.circleOpacityTarget = 0
+    //   this.circleScale = 1
+    //   this.circleScaleTarget = 0.01 // not 0 to avoid three js scale issues
+    // } else {
+    //   this.circleOpacity = 0
+    //   this.circleOpacityTarget = 1
+    //   this.elem.classList.add('show-dot')
+    //   this.circleScale = 0.01
+    //   this.circleScaleTarget = 1
+    //   this.showDot = true
+    // }
   }
 
   setUnits() {
