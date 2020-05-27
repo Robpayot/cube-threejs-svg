@@ -211,8 +211,8 @@ class Cube {
     this.renderer = new SVGRenderer()
     this.renderer.domElement.classList.add('cube__svgRenderer')
     this.renderer.setSize(this.width, this.height)
-    this.renderer.setQuality('low')
-    this.renderer.setPrecision(100)
+    this.renderer.setQuality('high')
+    this.renderer.setPrecision(1)
     this.ui.container.appendChild(this.renderer.domElement)
 
     this.rendererCSS = new CSS3DRenderer()
@@ -308,7 +308,8 @@ class Cube {
 
   initInsideCube() {
     const size = 40
-    const geometry = new THREE.BoxGeometry(size, size, size)
+    const nbTrianglePerFace = 6
+    const geometry = new THREE.BoxBufferGeometry(size, size, size, nbTrianglePerFace, nbTrianglePerFace, nbTrianglePerFace)
     const color = new THREE.Color(...this.insideCubeColor)
     this.insideCubeMaterial = new THREE.MeshBasicMaterial({ color, transparent: false })
     this.insideCube = new THREE.Mesh(geometry, this.insideCubeMaterial)
