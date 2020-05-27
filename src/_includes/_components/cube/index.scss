@@ -35,12 +35,12 @@
     font-weight: 400;
     justify-content: center;
     opacity: 0;
-    pointer-events: none !important;
     text-align: center;
-    transition: opacity .8s ease;
+    transition: opacity .5s ease;
 
     &.is-playing {
       opacity: 1;
+      transition: opacity .5s ease .5s;
     }
   }
 
