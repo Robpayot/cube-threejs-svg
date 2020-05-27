@@ -5,8 +5,6 @@ layout: default
 {% assign assetsPath = site.url | append: "/assets/" %}
 
 <main class="page">
-  {% for section in page.sections %}
-    {% include _sections/{{section.section}}/index.html %}
-  {% endfor %}
+	{% include _components/cube/index.html %}
 </main>
 

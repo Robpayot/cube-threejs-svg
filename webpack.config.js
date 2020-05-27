@@ -15,7 +15,6 @@ const PATHS = {
   ASSET_SRC_DIR: path.resolve(__dirname, 'src/_webpack/assets/'),
   ASSET_OUTPUT_DIR: path.resolve(__dirname, 'src/assets'),
   COMPONENTS: path.resolve(__dirname, 'src/_includes/_components/'),
-  SECTIONS: path.resolve(__dirname, 'src/_includes/_sections/'),
   SCSS_DIR: path.resolve(__dirname, 'src/_webpack/scss/'),
   JS_DIR: path.resolve(__dirname, 'src/_webpack/js/'),
 }
@@ -33,7 +32,6 @@ module.exports = {
     alias: {
       _js: PATHS.JS_DIR,
       _components: PATHS.COMPONENTS,
-      _sections: PATHS.SECTIONS,
       _scss: PATHS.SCSS_DIR,
       _assets: PATHS.ASSET_SRC_DIR,
     },
@@ -126,8 +124,6 @@ module.exports = {
     }),
     new CopyPlugin([
       { from: `${PATHS.ASSET_SRC_DIR}/images/`, to: `${PATHS.ASSET_OUTPUT_DIR}/images/` },
-      { from: `${PATHS.ASSET_SRC_DIR}/icons/`, to: `${PATHS.ASSET_OUTPUT_DIR}/icons/` },
-      { from: `${PATHS.ASSET_SRC_DIR}/fonts/`, to: `${PATHS.ASSET_OUTPUT_DIR}/fonts/` },
     ]),
   ],
   devtool: !IS_PROD && 'source-map',
