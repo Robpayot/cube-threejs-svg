@@ -1,4 +1,7 @@
-# LightStep
+# Three.js SVG Cube morphing
+
+A small experimentation using THREE.JS SVGRenderer to render a SVG Cube including morphing and other animations.
+This is also using the THREE.JS CSSRenderer to display HTML text in a 3D environment.
 
 ## Setup
 
@@ -9,13 +12,6 @@
 
 * `yarn start` - local dev server at localhost:4000
 * `yarn run build` - build for production
-
-## Staging
-
-You need to have the gcloud CLI installed.
-
-* `yarn run build`
-* `gcloud app deploy --project=uq-lightstep --version=YOUR_VERSION --no-promote`
 
 ## Structure
 

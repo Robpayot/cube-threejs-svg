@@ -4,6 +4,7 @@ import { CSS3DRenderer, CSS3DObject } from 'three/examples/jsm/renderers/CSS3DRe
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader'
 import { outExpo, outElastic } from '_js/utils/ease'
 import getNow from '_js/utils/time'
+import * as dat from 'dat.gui'
 
 import RAFManager from '_js/managers/RAFManager'
 import MouseManager from '_js/managers/MouseManager'
@@ -13,7 +14,7 @@ import shape2 from '_assets/cube/02b_face.obj'
 import shape3 from '_assets/cube/03_face.obj'
 
 const COLORS = {
-  black: 0x262626,
+  black: 0x2c3e50,
   blue: [0.20, 0.59, 0.86],
   cyan: [0.10, 0.73, 0.61],
   green: [0.18, 0.8, 0.44],
@@ -118,6 +119,8 @@ class Cube {
     this.started = true
     this.events(true)
 
+    this.initGUI()
+
     this.htmlDivs[0].wrapper.classList.add('is-playing')
 
     setTimeout(() => {
@@ -143,6 +146,26 @@ class Cube {
       RAFManager.removeItem(this.handleRAF)
       MouseManager.removeItem(this.handleMouseMove)
     }
+  }
+
+  initGUI() {
+    const gui = new dat.GUI()
+
+    this.guiOpts = {
+      big_cube_stroke: 2,
+      small_cube_scale: 1,
+    }
+
+    gui.add(this.guiOpts, 'big_cube_stroke', 1, 10).onChange(this.handleGUI).name('Big cube stroke')
+    gui.add(this.guiOpts, 'small_cube_scale', 0.0, 1.5).onChange(this.handleGUI).name('Small cube scale')
+  }
+
+  handleGUI = () => {
+    this.cube.material.linewidth = this.guiOpts.big_cube_stroke
+    this.cube.material.needsUpdate = true
+
+    const scale = this.guiOpts.small_cube_scale
+    this.insideCube.scale.set(scale, scale, scale)
   }
 
   introInsideCube() {
