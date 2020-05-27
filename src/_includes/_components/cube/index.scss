@@ -1,16 +1,7 @@
 .cube {
-  cursor: pointer;
   opacity: 0;
   position: relative;
   transform: scale(.8);
-
-  // &.show-dot {
-  //   .cube__svg.is-playing {
-  //     // display: none;
-  //     opacity: 0;
-  //     transition: opacity .5s $easeout-expo;
-  //   }
-  // }
 
   &.transi-in {
     opacity: 1;
@@ -40,6 +31,8 @@
     align-items: center;
     color: black;
     display: flex;
+    font-family: Oswald;
+    font-weight: 400;
     justify-content: center;
     opacity: 0;
     pointer-events: none !important;

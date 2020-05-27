@@ -13,7 +13,7 @@ html {
 body {
   background-color: $color-off-white;
   color: $color-ls-black;
-  overflow-x: hidden; // important for shapes going outside the body
+  overflow: hidden; // important for shapes going outside the body
   width: 100%;
 }
 

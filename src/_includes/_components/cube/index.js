@@ -23,10 +23,8 @@ class Cube {
   constructor(elem) {
     this.elem = elem
     this.sceneCSSScale = 0.5
-    this.normalDuration = 3000
-    this.longDuration = 4000
-    this.durationRotate = 3000
-    this.durationMorph = 3000
+    this.normalDuration = 4000
+    this.longDuration = 5000
     this.durationInsideCubeAppear = 500
     this.durationInsideCubeScale = 1000
     this.mouse = {
@@ -120,15 +118,13 @@ class Cube {
 
     setTimeout(() => {
       this.loopPhases()
-    }, 500)
+    }, 1000)
   }
 
   events(enable) {
     if (enable) {
-      // this.elem.addEventListener('click', this.toggleStyle)
       window.addEventListener('resize', this.handleResize)
     } else {
-      // this.elem.removeEventListener('click', this.toggleStyle)
       window.removeEventListener('resize', this.handleResize)
     }
   }
@@ -160,7 +156,7 @@ class Cube {
     this.phase = 0
 
     let index = 0
-    const mainDelay = 3400
+    const mainDelay = this.normalDuration + 400
 
     const loop = () => {
       const nextIndex = index + 1 > 2 ? 0 : index + 1
@@ -215,8 +211,8 @@ class Cube {
     this.renderer = new SVGRenderer()
     this.renderer.domElement.classList.add('cube__svgRenderer')
     this.renderer.setSize(this.width, this.height)
-    this.renderer.setQuality('high')
-    // this.renderer.setPrecision(100)
+    this.renderer.setQuality('low')
+    this.renderer.setPrecision(100)
     this.ui.container.appendChild(this.renderer.domElement)
 
     this.rendererCSS = new CSS3DRenderer()
@@ -257,7 +253,7 @@ class Cube {
 
     // create texts
     for (let i = 0; i < this.htmlDivs.length; i++) {
-      let pos = new THREE.Vector3((-(size / 2 + offset) * 1) / this.sceneCSSScale, 0, 0)
+      let pos = new THREE.Vector3((-(size / 2 + offset) * 1) / this.sceneCSSScale, 25, 0)
 
       if (i === 1) {
         pos = new THREE.Vector3((-(size / 2 + offset * 2) * 1) / this.sceneCSSScale, 50, 50)
@@ -287,7 +283,7 @@ class Cube {
     const div = document.createElement('div')
     div.style.width = `${(size + 600) / this.sceneCSSScale}px`
     div.style.height = `${(size + 40) / this.sceneCSSScale}px`
-    div.style.fontSize = `${(size / 2) / this.sceneCSSScale}px`
+    div.style.fontSize = `${(size / 2.5) / this.sceneCSSScale}px`
 
     div.classList.add('cube__text')
     div.innerHTML = htmlDiv.text
@@ -311,10 +307,10 @@ class Cube {
   }
 
   initInsideCube() {
-    const size = 22
-    const geometry = new THREE.BoxBufferGeometry(size, size, size)
+    const size = 40
+    const geometry = new THREE.BoxGeometry(size, size, size)
     const color = new THREE.Color(...this.insideCubeColor)
-    this.insideCubeMaterial = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0 })
+    this.insideCubeMaterial = new THREE.MeshBasicMaterial({ color, transparent: false })
     this.insideCube = new THREE.Mesh(geometry, this.insideCubeMaterial)
     this.cube.add(this.insideCube)
   }
@@ -357,27 +353,6 @@ class Cube {
     this.transitionStarted = true
   }
 
-  toggleStyle = () => {
-    // this.showInsideCubeStarted = true
-    // this.startAnimationInsideCube = getNow()
-
-    // if (this.showDot === true) {
-    //   this.elem.classList.remove('show-dot')
-    //   this.showDot = false
-    //   this.insideCubeOpacity = 1
-    //   this.insideCubeOpacityTarget = 0
-    //   this.insideCubeScale = 1
-    //   this.insideCubeScaleTarget = 0.01 // not 0 to avoid three js scale issues
-    // } else {
-    //   this.insideCubeOpacity = 0
-    //   this.insideCubeOpacityTarget = 1
-    //   this.elem.classList.add('show-dot')
-    //   this.insideCubeScale = 0.01
-    //   this.insideCubeScaleTarget = 1
-    //   this.showDot = true
-    // }
-  }
-
   setUnits() {
     this.width = this.ui.container.clientWidth
     this.height = this.ui.container.clientHeight
@@ -394,42 +369,16 @@ class Cube {
     const { now } = e.detail
 
     if (this.started) {
-      this.renderer.render(this.scene, this.camera)
-      this.rendererCSS.render(this.sceneCSS, this.camera)
-
       if (this.transitionStarted) {
         this.changeInsideCubeColor(now)
         this.rotateOnOneSide(now)
         this.morph(now)
       }
 
-      if (this.showInsideCubeStarted) {
-        this.animateInsideCube(now)
-      }
-
       this.mouseRotation()
-    }
-  }
 
-  animateInsideCube(now) {
-    // opacity
-    const percent = (now - this.startAnimationInsideCube) / this.durationInsideCubeAppear
-    const opacity = this.insideCubeOpacity + (this.insideCubeOpacityTarget - this.insideCubeOpacity) * outExpo(percent)
-    if (percent < 1) {
-      this.insideCubeMaterial.opacity = opacity
-      // this.insideCubeMaterial.needsUpdate = true
-    }
-
-    // scale
-    const percentScale = (now - this.startAnimationInsideCube) / this.durationInsideCubeScale
-    const scale = this.insideCubeScale + (this.insideCubeScaleTarget - this.insideCubeScale) * outExpo(percentScale)
-    // const roundValue = 1000
-    // scale = Math.round(scale * roundValue) / roundValue
-
-    if (percentScale < 1) {
-      this.insideCube.scale.set(scale, scale, scale)
-    } else {
-      this.showInsideCubeStarted = false
+      this.renderer.render(this.scene, this.camera)
+      this.rendererCSS.render(this.sceneCSS, this.camera)
     }
   }
 
