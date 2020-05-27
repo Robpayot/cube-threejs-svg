@@ -1,15 +1,7 @@
 @import '_reset';
-@import '_fonts';
 // Import variables
-@import 'variables/_sizes';
 @import 'variables/_colors';
 @import 'variables/_eases';
-// Import utils (functions, mixins, extends)
-@import 'utils/_media-queries';
-@import 'utils/_grid';
-@import 'utils/_em';
-// Import vendor
-@import '~normalize.css/normalize.css';
 
 // Import global (html, body)
 @import '_global';
@@ -17,5 +9,3 @@
 @import 'layouts/_page';
 // Import components
 @import 'src/_includes/_components/**/*.scss';
-// Import sections
-@import 'src/_includes/_sections/**/*.scss';

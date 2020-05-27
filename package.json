@@ -1,8 +1,8 @@
 {
-	"name": "lightstep",
+	"name": "Cube-svg-threejs",
 	"version": "1.0.0",
 	"private": true,
-	"description": "LightStep website",
+	"description": "Small experiment rendering a cube in svg using the svgrenderer from threejs",
 	"main": "webpack.config.js",
 	"scripts": {
 		"start": "sh -c 'webpack --watch --mode development & bundle exec jekyll serve --livereload & wait'",
@@ -46,12 +46,7 @@
 	},
 	"dependencies": {
 		"dat.gui": "^0.7.7",
-		"intersection-observer": "^0.7.0",
-		"lottie-web": "^5.6.5",
-		"normalize.css": "^8.0.1",
-		"three": "^0.113.2",
-		"three.meshline": "^1.2.0",
-		"uuid": "^7.0.2"
+		"three": "^0.113.2"
 	},
 	"browserslist": [
 		"> 1%",
