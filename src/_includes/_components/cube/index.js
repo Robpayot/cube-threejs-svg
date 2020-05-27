@@ -13,7 +13,7 @@ import shape2 from '_assets/cube/02b_face.obj'
 import shape3 from '_assets/cube/03_face.obj'
 
 const COLORS = {
-  black: 0x000000,
+  black: 0x262626,
   green: [0.01, 0.61, 0.29], // 1%, 61%, 29%
   yellow: [1, 0.77, 0.05], // 100%, 77%, 5%
   blue: [0, 0.47, 0.78], // 0%, 47%, 78%
