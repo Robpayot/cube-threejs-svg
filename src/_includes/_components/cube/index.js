@@ -14,10 +14,12 @@ import shape3 from '_assets/cube/03_face.obj'
 
 const COLORS = {
   black: 0x262626,
-  green: [0.01, 0.61, 0.29], // 1%, 61%, 29%
-  yellow: [1, 0.77, 0.05], // 100%, 77%, 5%
-  blue: [0, 0.47, 0.78], // 0%, 47%, 78%
+  blue: [0.20, 0.59, 0.86],
+  cyan: [0.10, 0.73, 0.61],
+  green: [0.18, 0.8, 0.44],
 }
+
+const TEXTS = ['THREE.JS', 'SVG', 'MORPHING']
 
 class Cube {
   constructor(elem) {
@@ -36,7 +38,7 @@ class Cube {
     this.mouseMaxAngle = 10
     this.mouseDelay = 0.1
     this.extendCoef = 1.3
-    this.htmlDivs = [{ text: 'THREE.JS' }, { text: 'SVG' }, { text: 'MORPHING' }]
+    this.htmlDivs = [{ text: TEXTS[0] }, { text: TEXTS[1] }, { text: TEXTS[2] }]
     this.graphs = []
     this.targetCubeRotateY = 0
     this.targetCubeRotateZ = 0
@@ -50,8 +52,8 @@ class Cube {
     this.insideCubeScale = 0.01
 
     this.shapes = [null, null, null]
-    this.insideCubeColors = [COLORS.green, COLORS.yellow, COLORS.blue]
-    this.insideCubeColor = [...COLORS.green] // need to be a different reference than COLORS.green
+    this.insideCubeColors = [COLORS.blue, COLORS.green, COLORS.cyan]
+    this.insideCubeColor = [...COLORS.blue] // need to be a different reference than COLORS.green
     this.targetColor = [0, 0, 0]
     this.OBJLoader = new OBJLoader()
     this.cubeParent = new THREE.Object3D()
@@ -115,6 +117,8 @@ class Cube {
 
     this.started = true
     this.events(true)
+
+    this.htmlDivs[0].wrapper.classList.add('is-playing')
 
     setTimeout(() => {
       this.loopPhases()
