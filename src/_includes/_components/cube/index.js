@@ -9,9 +9,9 @@ import * as dat from 'dat.gui'
 import RAFManager from '_js/managers/RAFManager'
 import MouseManager from '_js/managers/MouseManager'
 
-import shape1 from '_assets/cube/01_start.obj'
-import shape2 from '_assets/cube/02b_face.obj'
-import shape3 from '_assets/cube/03_face.obj'
+import shape1 from '_assets/cube/shape-1.obj'
+import shape2 from '_assets/cube/shape-2.obj'
+import shape3 from '_assets/cube/shape-3.obj'
 
 const COLORS = {
   black: 0x2c3e50,
@@ -28,8 +28,6 @@ class Cube {
     this.sceneCSSScale = 0.5
     this.normalDuration = 4000
     this.longDuration = 5000
-    this.durationInsideCubeAppear = 500
-    this.durationInsideCubeScale = 1000
     this.mouse = {
       x: 0,
       y: 0,
@@ -40,7 +38,7 @@ class Cube {
     this.mouseDelay = 0.1
     this.extendCoef = 1.3
     this.htmlDivs = [{ text: TEXTS[0] }, { text: TEXTS[1] }, { text: TEXTS[2] }]
-    this.graphs = []
+    this.texts = []
     this.targetCubeRotateY = 0
     this.targetCubeRotateZ = 0
     this.angleY = 0
@@ -50,7 +48,6 @@ class Cube {
     this.transitionStarted = false
     this.phase = 0
     this.offsetCubeRotY = THREE.Math.degToRad(90)
-    this.insideCubeScale = 0.01
 
     this.shapes = [null, null, null]
     this.insideCubeColors = [COLORS.blue, COLORS.green, COLORS.cyan]
@@ -104,13 +101,15 @@ class Cube {
   }
 
   finishLoaded = () => {
+    this.initGUI()
+
     this.setUnits()
     this.buildScene()
     this.buildRender()
     this.buildCamera()
 
-    this.initCube()
-    this.initInsideCube()
+    this.buildCube()
+    this.buildInsideCube()
     this.elem.classList.add('transi-in')
 
     this.mainEvents(true)
@@ -118,8 +117,6 @@ class Cube {
 
     this.started = true
     this.events(true)
-
-    this.initGUI()
 
     this.htmlDivs[0].wrapper.classList.add('is-playing')
 
@@ -152,11 +149,11 @@ class Cube {
     const gui = new dat.GUI()
 
     this.guiOpts = {
-      big_cube_stroke: 2,
+      big_cube_stroke: 4.7,
       small_cube_scale: 1,
     }
 
-    gui.add(this.guiOpts, 'big_cube_stroke', 1, 10).onChange(this.handleGUI).name('Big cube stroke')
+    gui.add(this.guiOpts, 'big_cube_stroke', 1, 20).onChange(this.handleGUI).name('Big cube stroke')
     gui.add(this.guiOpts, 'small_cube_scale', 0.0, 1.5).onChange(this.handleGUI).name('Small cube scale')
   }
 
@@ -174,9 +171,6 @@ class Cube {
     this.insideCubeOpacity = 0
     this.insideCubeOpacityTarget = 1
     this.elem.classList.add('show-dot')
-    this.insideCubeScale = 0.01
-    this.insideCubeScaleTarget = 1
-    this.showDot = true
   }
 
   loopPhases() {
@@ -262,13 +256,13 @@ class Cube {
     this.camera.updateProjectionMatrix()
   }
 
-  initCube() {
+  buildCube() {
     // edges
     const size = 100
 
     const lineMaterial = new THREE.LineBasicMaterial({
       color: COLORS.black,
-      linewidth: size / 50,
+      linewidth: this.guiOpts.big_cube_stroke,
     })
 
     const geometry = this.shapes[this.phase].children[0].geometry.clone() // clone() is very important here
@@ -286,7 +280,7 @@ class Cube {
         pos = new THREE.Vector3((-(size / 2 + offset * 2) * 1) / this.sceneCSSScale, 50, 50)
       }
 
-      this.createPlane(
+      this.buildPlane(
         size,
         '#00ff00',
         pos,
@@ -305,7 +299,7 @@ class Cube {
     this.scene.add(this.cubeParent)
   }
 
-  createPlane(size, cssColor, pos, rot, htmlDiv) {
+  buildPlane(size, cssColor, pos, rot, htmlDiv) {
     // check how to fix bug on chrome
     const div = document.createElement('div')
     div.style.width = `${(size + 600) / this.sceneCSSScale}px`
@@ -328,12 +322,12 @@ class Cube {
 
     this.graphParent.add(plane)
 
-    this.graphs.push(plane)
+    this.texts.push(plane)
 
     this.graphOriginRotation = plane.rotation.clone()
   }
 
-  initInsideCube() {
+  buildInsideCube() {
     const size = 40
     const nbTrianglePerFace = 6
     const geometry = new THREE.BoxBufferGeometry(size, size, size, nbTrianglePerFace, nbTrianglePerFace, nbTrianglePerFace)
@@ -445,17 +439,17 @@ class Cube {
     this.cube.rotation.y = cubeProgressY
     this.cube.rotation.z = cubeProgressZ
 
-    this.graphs[lastPhase].rotation.y = graphProgressY
-    this.graphs[lastPhase].rotation.z = graphProgressZ
+    this.texts[lastPhase].rotation.y = graphProgressY
+    this.texts[lastPhase].rotation.z = graphProgressZ
 
-    this.graphs[this.phase].rotation.y = nextGraphProgressY
-    this.graphs[this.phase].rotation.z = nextGraphProgressZ
+    this.texts[this.phase].rotation.y = nextGraphProgressY
+    this.texts[this.phase].rotation.z = nextGraphProgressZ
 
     if (percent > 1) {
       // end of animation
       this.transitionStarted = false
       // reset graph rotation
-      this.graphs[lastPhase].rotation.copy(this.graphOriginRotations[lastPhase])
+      this.texts[lastPhase].rotation.copy(this.graphOriginRotations[lastPhase])
 
       this.cubeOriginRotation = this.cube.rotation.clone()
     }
