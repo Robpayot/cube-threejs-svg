@@ -4,6 +4,6 @@ in_nav: true
 heading: Pages
 type: pages
 order: 1
-permalink: "/cube-threejs-svg/"
+permalink: "/"
 description: "Small experiment rendering a cube in SVG using the SVGRenderer from THREE.JS"
 ---

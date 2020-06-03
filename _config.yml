@@ -1,6 +1,6 @@
-title: LightStep
+title: SVG Cube - THREE.JS
 description: >-
-  LightStep website
+  Small experiment rendering a cube in SVG using the SVGRenderer from THREE.JS
 baseurl: ""
 url: ""
 
