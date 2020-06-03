@@ -1,7 +1,7 @@
 title: SVG Cube - THREE.JS
 description: >-
   Small experiment rendering a cube in SVG using the SVGRenderer from THREE.JS
-baseurl: ""
+baseurl: "/cube-threejs-svg"
 url: ""
 
 include: ["_pages"] # if we don't include pages, livereload is broken
