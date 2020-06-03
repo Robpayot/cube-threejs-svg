@@ -55,9 +55,9 @@ class Cube {
     this.targetColor = [0, 0, 0]
     this.OBJLoader = new OBJLoader()
     this.cubeParent = new THREE.Object3D()
-    this.graphParent = new THREE.Object3D()
+    this.textsParent = new THREE.Object3D()
 
-    this.graphOriginRotations = [
+    this.textsOriginRotations = [
       new THREE.Euler(0, THREE.Math.degToRad(-90), THREE.Math.degToRad(-90)),
       new THREE.Euler(0, THREE.Math.degToRad(90), 0),
       new THREE.Euler(0, THREE.Math.degToRad(0), THREE.Math.degToRad(-90)),
@@ -67,15 +67,7 @@ class Cube {
       container: this.elem.querySelector('.cube__inner'),
     }
 
-    this.mount()
-  }
-
-  mount() {
     this.load()
-  }
-
-  unmount() {
-    this.events(false)
   }
 
   load() {
@@ -112,13 +104,10 @@ class Cube {
     this.buildInsideCube()
     this.elem.classList.add('transi-in')
 
-    this.mainEvents(true)
-    this.introInsideCube()
-
     this.started = true
     this.events(true)
 
-    this.htmlDivs[0].wrapper.classList.add('is-playing')
+    this.htmlDivs[0].wrapper.classList.add('is-displayed')
 
     setTimeout(() => {
       this.loopPhases()
@@ -128,18 +117,10 @@ class Cube {
   events(enable) {
     if (enable) {
       window.addEventListener('resize', this.handleResize)
-    } else {
-      window.removeEventListener('resize', this.handleResize)
-    }
-  }
-
-  mainEvents(enable) {
-    this.mainEventsActive = enable
-
-    if (enable) {
       RAFManager.addItem(this.handleRAF)
       MouseManager.addItem(this.handleMouseMove)
     } else {
+      window.removeEventListener('resize', this.handleResize)
       RAFManager.removeItem(this.handleRAF)
       MouseManager.removeItem(this.handleMouseMove)
     }
@@ -163,14 +144,6 @@ class Cube {
 
     const scale = this.guiOpts.small_cube_scale
     this.insideCube.scale.set(scale, scale, scale)
-  }
-
-  introInsideCube() {
-    this.showInsideCubeStarted = true
-    this.startAnimationInsideCube = getNow()
-    this.insideCubeOpacity = 0
-    this.insideCubeOpacityTarget = 1
-    this.elem.classList.add('show-dot')
   }
 
   loopPhases() {
@@ -205,8 +178,8 @@ class Cube {
         default:
       }
 
-      this.htmlDivs[index].wrapper.classList.remove('is-playing')
-      this.htmlDivs[nextIndex].wrapper.classList.add('is-playing')
+      this.htmlDivs[index].wrapper.classList.remove('is-displayed')
+      this.htmlDivs[nextIndex].wrapper.classList.add('is-displayed')
 
       setTimeout(() => {
         loop()
@@ -289,7 +262,7 @@ class Cube {
       )
     }
 
-    this.sceneCSS.add(this.graphParent)
+    this.sceneCSS.add(this.textsParent)
 
     this.cubeOriginPosition = this.cube.position.clone()
     this.cubeOriginRotation = this.cube.rotation.clone()
@@ -320,7 +293,7 @@ class Cube {
     const plane = new THREE.Object3D()
     plane.add(object)
 
-    this.graphParent.add(plane)
+    this.textsParent.add(plane)
 
     this.texts.push(plane)
 
@@ -425,11 +398,11 @@ class Cube {
     const graphProgressZ = this.targetGraphRotateZ * outExpo(percent)
     // move next graph in front
     const nextGraphProgressY =
-      this.graphOriginRotations[this.phase].y +
-      (THREE.Math.degToRad(0) - this.graphOriginRotations[this.phase].y) * outExpo(percent)
+      this.textsOriginRotations[this.phase].y +
+      (THREE.Math.degToRad(0) - this.textsOriginRotations[this.phase].y) * outExpo(percent)
     const nextGraphProgressZ =
-      this.graphOriginRotations[this.phase].z +
-      (THREE.Math.degToRad(0) - this.graphOriginRotations[this.phase].z) * outExpo(percent)
+      this.textsOriginRotations[this.phase].z +
+      (THREE.Math.degToRad(0) - this.textsOriginRotations[this.phase].z) * outExpo(percent)
     // const graphProgress = this.targetGraphRotate * outExpo(percent)
     let lastPhase = this.phase - 1
     if (lastPhase < 0) {
@@ -449,7 +422,7 @@ class Cube {
       // end of animation
       this.transitionStarted = false
       // reset graph rotation
-      this.texts[lastPhase].rotation.copy(this.graphOriginRotations[lastPhase])
+      this.texts[lastPhase].rotation.copy(this.textsOriginRotations[lastPhase])
 
       this.cubeOriginRotation = this.cube.rotation.clone()
     }
@@ -462,7 +435,7 @@ class Cube {
     this.cubeParent.rotation.y = this.mouseAngleY
     this.cubeParent.rotation.z = this.mouseAngleZ
 
-    this.graphParent.rotation.copy(this.cubeParent.rotation)
+    this.textsParent.rotation.copy(this.cubeParent.rotation)
   }
 
   morph(now) {

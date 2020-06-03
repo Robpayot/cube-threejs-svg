@@ -38,7 +38,7 @@
     text-align: center;
     transition: opacity .5s ease;
 
-    &.is-playing {
+    &.is-displayed {
       opacity: 1;
       transition: opacity .5s ease .5s;
     }
