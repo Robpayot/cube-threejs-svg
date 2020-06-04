@@ -8,7 +8,7 @@ const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 
 const IS_PROD = process.env.NODE_ENV === 'production'
-const ASSETS_URL = '/assets/'
+const ASSETS_URL = '/cube-threejs-svg/assets/'
 
 const PATHS = {
   SRC_DIR: path.resolve(__dirname, 'src/_webpack'),
