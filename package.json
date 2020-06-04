@@ -5,7 +5,7 @@
 	"description": "Small experiment rendering a cube in svg using the svgrenderer from threejs",
 	"main": "webpack.config.js",
 	"scripts": {
-		"start": "sh -c 'webpack --watch --mode development & bundle exec jekyll serve --livereload & wait'",
+		"start": "sh -c 'webpack --watch --mode development & bundle exec jekyll serve --livereload --baseurl='' & wait'",
 		"webpack-build": "NODE_ENV=production webpack -p --mode production",
 		"jekyll-build": "JEKYLL_ENV=production bundle exec jekyll build",
 		"build": "yarn run webpack-build && yarn run jekyll-build"
